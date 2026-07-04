@@ -1,0 +1,14 @@
+{
+  "/page": "app/page.js",
+  "/operacoes/page": "app/operacoes/page.js",
+  "/pedidos/page": "app/pedidos/page.js",
+  "/entregas/page": "app/entregas/page.js",
+  "/coletas/page": "app/coletas/page.js",
+  "/rotas/page": "app/rotas/page.js",
+  "/frota/page": "app/frota/page.js",
+  "/motoristas/page": "app/motoristas/page.js",
+  "/clientes/page": "app/clientes/page.js",
+  "/custos/page": "app/custos/page.js",
+  "/relatorios/page": "app/relatorios/page.js",
+  "/configuracoes/page": "app/configuracoes/page.js"
+}
