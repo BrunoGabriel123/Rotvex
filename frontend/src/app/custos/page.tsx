@@ -3,8 +3,8 @@
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SectionCard } from "@/components/ui/SectionCard";
-import { AbastecimentosTable } from "@/features/custos/components/AbastecimentosTable";
-import { FuelForm } from "@/features/custos/components/FuelForm";
+import { ManutencoesTable } from "@/features/custos/components/ManutencoesTable";
+import { MaintenanceForm } from "@/features/custos/components/MaintenanceForm";
 import { useState } from "react";
 
 export default function CustosPage() {
@@ -15,16 +15,16 @@ export default function CustosPage() {
       <PageHeader
         title="Custos"
         description="Gerencie os custos operacionais"
-        actionLabel="Novo Abastecimento"
+        actionLabel="Nova Manutenção"
         onAction={() => setIsFormOpen(true)}
       />
 
-      <SectionCard title="Abastecimentos">
-        <AbastecimentosTable />
+      <SectionCard title="Manutenções">
+        <ManutencoesTable />
       </SectionCard>
 
       {isFormOpen && (
-        <FuelForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+        <MaintenanceForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
       )}
     </MainLayout>
   );
