@@ -1,20 +1,31 @@
+"use client";
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Building2 } from "lucide-react";
+import { SectionCard } from "@/components/ui/SectionCard";
+import { ClientesTable } from "@/features/clientes/components/ClientesTable";
+import { ClientForm } from "@/features/clientes/components/ClientForm";
+import { useState } from "react";
 
 export default function ClientesPage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <MainLayout>
       <PageHeader
         title="Clientes"
-        description="Gerenciamento de clientes"
+        description="Gerencie os cadastros de clientes"
+        actionLabel="Novo Cliente"
+        onAction={() => setIsFormOpen(true)}
       />
-      <EmptyState
-        title="Nenhum cliente encontrado"
-        description="Os clientes aparecerão aqui quando cadastrados."
-        icon={<Building2 className="h-12 w-12" />}
-      />
+
+      <SectionCard title="Lista de Clientes">
+        <ClientesTable />
+      </SectionCard>
+
+      {isFormOpen && (
+        <ClientForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      )}
     </MainLayout>
   );
 }
