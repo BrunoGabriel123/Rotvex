@@ -1,20 +1,31 @@
+"use client";
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Truck } from "lucide-react";
+import { SectionCard } from "@/components/ui/SectionCard";
+import { VeiculosTable } from "@/features/frota/components/VeiculosTable";
+import { VehicleForm } from "@/features/frota/components/VehicleForm";
+import { useState } from "react";
 
 export default function FrotaPage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <MainLayout>
       <PageHeader
         title="Frota"
-        description="Gerenciamento da frota de veículos"
+        description="Gerencie os cadastros de veículos"
+        actionLabel="Novo Veículo"
+        onAction={() => setIsFormOpen(true)}
       />
-      <EmptyState
-        title="Nenhum veículo encontrado"
-        description="Os veículos aparecerão aqui quando cadastrados."
-        icon={<Truck className="h-12 w-12" />}
-      />
+
+      <SectionCard title="Lista de Veículos">
+        <VeiculosTable />
+      </SectionCard>
+
+      {isFormOpen && (
+        <VehicleForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      )}
     </MainLayout>
   );
 }
