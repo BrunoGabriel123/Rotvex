@@ -1,20 +1,31 @@
+"use client";
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Route } from "lucide-react";
+import { SectionCard } from "@/components/ui/SectionCard";
+import { RotasTable } from "@/features/rotas/components/RotasTable";
+import { RouteForm } from "@/features/rotas/components/RouteForm";
+import { useState } from "react";
 
 export default function RotasPage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <MainLayout>
       <PageHeader
         title="Rotas"
-        description="Planejamento e otimização de rotas"
+        description="Gerencie o planejamento de rotas"
+        actionLabel="Nova Rota"
+        onAction={() => setIsFormOpen(true)}
       />
-      <EmptyState
-        title="Nenhuma rota encontrada"
-        description="As rotas aparecerão aqui quando criadas."
-        icon={<Route className="h-12 w-12" />}
-      />
+
+      <SectionCard title="Lista de Rotas">
+        <RotasTable />
+      </SectionCard>
+
+      {isFormOpen && (
+        <RouteForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      )}
     </MainLayout>
   );
 }
