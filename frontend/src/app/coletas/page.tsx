@@ -1,20 +1,31 @@
+"use client";
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { MapPin } from "lucide-react";
+import { SectionCard } from "@/components/ui/SectionCard";
+import { ColetasTable } from "@/features/coletas/components/ColetasTable";
+import { PickupForm } from "@/features/coletas/components/PickupForm";
+import { useState } from "react";
 
 export default function ColetasPage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <MainLayout>
       <PageHeader
         title="Coletas"
-        description="Gerenciamento de coletas"
+        description="Gerencie as coletas"
+        actionLabel="Nova Coleta"
+        onAction={() => setIsFormOpen(true)}
       />
-      <EmptyState
-        title="Nenhuma coleta encontrada"
-        description="As coletas aparecerão aqui quando agendadas."
-        icon={<MapPin className="h-12 w-12" />}
-      />
+
+      <SectionCard title="Lista de Coletas">
+        <ColetasTable />
+      </SectionCard>
+
+      {isFormOpen && (
+        <PickupForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      )}
     </MainLayout>
   );
 }
