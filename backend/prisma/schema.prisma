@@ -1,0 +1,249 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id          String    @id @default(cuid())
+  name        String
+  cnpj        String?   @unique
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  users       User[]
+  clients     Client[]
+  vehicles    Vehicle[]
+  drivers     Driver[]
+  orders      Order[]
+  routes      Route[]
+  auditLogs   AuditLog[]
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  password     String
+  name         String
+  active       Boolean      @default(true)
+  companyId    String
+  company      Company      @relation(fields: [companyId], references: [id])
+  roleId       String
+  role         Role         @relation(fields: [roleId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  refreshTokens RefreshToken[]
+  auditLogs    AuditLog[]
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Permission {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  resource    String
+  action      String
+  roles       Role[]    @relation("RolePermissions")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Vehicle {
+  id          String   @id @default(cuid())
+  plate       String   @unique
+  model       String
+  year        Int
+  type        String
+  status      String   @default("active")
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  maintenances Maintenance[]
+  fuels       Fuel[]
+  deliveries  Delivery[]
+}
+
+model Driver {
+  id          String    @id @default(cuid())
+  name        String
+  cpf         String?   @unique
+  cnh         String?
+  cnhType     String?
+  phone       String?
+  status      String    @default("active")
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deliveries  Delivery[]
+}
+
+model Client {
+  id          String    @id @default(cuid())
+  name        String
+  cnpj        String?   @unique
+  cpf         String?
+  email       String?
+  phone       String?
+  address     String?
+  city        String?
+  state       String?
+  zipCode     String?
+  status      String    @default("active")
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  orders      Order[]
+}
+
+model Order {
+  id          String    @id @default(cuid())
+  orderNumber String    @unique
+  description String?
+  status      String    @default("pending")
+  priority    String    @default("normal")
+  clientId    String
+  client      Client    @relation(fields: [clientId], references: [id])
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deliveries  Delivery[]
+  pickups     Pickup[]
+}
+
+model Delivery {
+  id          String   @id @default(cuid())
+  status      String   @default("pending")
+  address     String
+  city        String
+  state       String
+  zipCode     String
+  latitude    Float?
+  longitude   Float?
+  scheduledAt DateTime?
+  completedAt DateTime?
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id])
+  vehicleId   String?
+  vehicle     Vehicle? @relation(fields: [vehicleId], references: [id])
+  driverId    String?
+  driver      Driver?  @relation(fields: [driverId], references: [id])
+  routeId     String?
+  route       Route?   @relation(fields: [routeId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Pickup {
+  id          String   @id @default(cuid())
+  status      String   @default("pending")
+  address     String
+  city        String
+  state       String
+  zipCode     String
+  latitude    Float?
+  longitude   Float?
+  scheduledAt DateTime?
+  completedAt DateTime?
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Route {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  status      String     @default("active")
+  companyId   String
+  company     Company    @relation(fields: [companyId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deliveries  Delivery[]
+}
+
+model Maintenance {
+  id          String   @id @default(cuid())
+  type        String
+  description String?
+  cost        Float?
+  status      String   @default("pending")
+  scheduledAt DateTime?
+  completedAt DateTime?
+  vehicleId   String
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Fuel {
+  id          String   @id @default(cuid())
+  liters      Float
+  cost        Float
+  fuelType    String
+  station     String?
+  odometer    Int?
+  vehicleId   String
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  description String
+  amount      Float
+  category    String
+  date        DateTime
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String
+  read      Boolean  @default(false)
+  userId    String?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String?
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
