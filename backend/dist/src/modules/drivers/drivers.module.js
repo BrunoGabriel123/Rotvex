@@ -10,13 +10,14 @@ exports.DriversModule = void 0;
 const common_1 = require("@nestjs/common");
 const drivers_controller_1 = require("./drivers.controller");
 const drivers_service_1 = require("./drivers.service");
+const prisma_service_1 = require("../../common/database/prisma.service");
 let DriversModule = class DriversModule {
 };
 exports.DriversModule = DriversModule;
 exports.DriversModule = DriversModule = __decorate([
     (0, common_1.Module)({
         controllers: [drivers_controller_1.DriversController],
-        providers: [drivers_service_1.DriversService],
+        providers: [drivers_service_1.DriversService, prisma_service_1.PrismaService],
         exports: [drivers_service_1.DriversService],
     })
 ], DriversModule);

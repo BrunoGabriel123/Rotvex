@@ -7,7 +7,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Company {
@@ -15,6 +14,7 @@ model Company {
   name        String
   cnpj        String?   @unique
   active      Boolean   @default(true)
+  deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   users       User[]
@@ -24,6 +24,8 @@ model Company {
   orders      Order[]
   routes      Route[]
   auditLogs   AuditLog[]
+  expenses    Expense[]
+  notifications Notification[]
 }
 
 model User {
@@ -32,6 +34,7 @@ model User {
   password     String
   name         String
   active       Boolean      @default(true)
+  deletedAt    DateTime?
   companyId    String
   company      Company      @relation(fields: [companyId], references: [id])
   roleId       String
@@ -43,24 +46,35 @@ model User {
 }
 
 model Role {
-  id          String       @id @default(cuid())
-  name        String       @unique
+  id          String           @id @default(cuid())
+  name        String           @unique
   description String?
-  permissions Permission[]
+  deletedAt   DateTime?
   users       User[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  rolePermissions RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 model Permission {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  description String?
-  resource    String
-  action      String
-  roles       Role[]    @relation("RolePermissions")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id               String            @id @default(cuid())
+  name             String            @unique
+  description      String?
+  resource         String
+  action           String
+  deletedAt        DateTime?
+  rolePermissions  RolePermission[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model RolePermission {
+  roleId       String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
 }
 
 model RefreshToken {
@@ -79,6 +93,7 @@ model Vehicle {
   year        Int
   type        String
   status      String   @default("active")
+  deletedAt   DateTime?
   companyId   String
   company     Company  @relation(fields: [companyId], references: [id])
   createdAt   DateTime @default(now())
@@ -96,6 +111,7 @@ model Driver {
   cnhType     String?
   phone       String?
   status      String    @default("active")
+  deletedAt   DateTime?
   companyId   String
   company     Company   @relation(fields: [companyId], references: [id])
   createdAt   DateTime  @default(now())
@@ -115,6 +131,7 @@ model Client {
   state       String?
   zipCode     String?
   status      String    @default("active")
+  deletedAt   DateTime?
   companyId   String
   company     Company   @relation(fields: [companyId], references: [id])
   createdAt   DateTime  @default(now())
@@ -128,6 +145,7 @@ model Order {
   description String?
   status      String    @default("pending")
   priority    String    @default("normal")
+  deletedAt   DateTime?
   clientId    String
   client      Client    @relation(fields: [clientId], references: [id])
   companyId   String
@@ -149,6 +167,7 @@ model Delivery {
   longitude   Float?
   scheduledAt DateTime?
   completedAt DateTime?
+  deletedAt   DateTime?
   orderId     String
   order       Order    @relation(fields: [orderId], references: [id])
   vehicleId   String?
@@ -172,6 +191,7 @@ model Pickup {
   longitude   Float?
   scheduledAt DateTime?
   completedAt DateTime?
+  deletedAt   DateTime?
   orderId     String
   order       Order    @relation(fields: [orderId], references: [id])
   createdAt   DateTime @default(now())
@@ -184,6 +204,7 @@ model Route {
   description String?
   status      String     @default("active")
   companyId   String
+  deletedAt   DateTime?
   company     Company    @relation(fields: [companyId], references: [id])
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -198,6 +219,7 @@ model Maintenance {
   status      String   @default("pending")
   scheduledAt DateTime?
   completedAt DateTime?
+  deletedAt   DateTime?
   vehicleId   String
   vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
   createdAt   DateTime @default(now())
@@ -211,6 +233,7 @@ model Fuel {
   fuelType    String
   station     String?
   odometer    Int?
+  deletedAt   DateTime?
   vehicleId   String
   vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
   createdAt   DateTime @default(now())
@@ -222,6 +245,9 @@ model Expense {
   amount      Float
   category    String
   date        DateTime
+  deletedAt   DateTime?
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
   createdAt   DateTime @default(now())
 }
 
@@ -229,7 +255,10 @@ model Notification {
   id        String   @id @default(cuid())
   title     String
   message   String
-  type      String
+  deletedAt DateTime?
+  type      String?
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
   read      Boolean  @default(false)
   userId    String?
   createdAt DateTime @default(now())

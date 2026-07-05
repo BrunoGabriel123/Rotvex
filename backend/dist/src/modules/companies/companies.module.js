@@ -10,13 +10,14 @@ exports.CompaniesModule = void 0;
 const common_1 = require("@nestjs/common");
 const companies_controller_1 = require("./companies.controller");
 const companies_service_1 = require("./companies.service");
+const prisma_service_1 = require("../../common/database/prisma.service");
 let CompaniesModule = class CompaniesModule {
 };
 exports.CompaniesModule = CompaniesModule;
 exports.CompaniesModule = CompaniesModule = __decorate([
     (0, common_1.Module)({
         controllers: [companies_controller_1.CompaniesController],
-        providers: [companies_service_1.CompaniesService],
+        providers: [companies_service_1.CompaniesService, prisma_service_1.PrismaService],
         exports: [companies_service_1.CompaniesService],
     })
 ], CompaniesModule);

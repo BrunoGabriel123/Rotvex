@@ -10,13 +10,14 @@ exports.MaintenanceModule = void 0;
 const common_1 = require("@nestjs/common");
 const maintenance_controller_1 = require("./maintenance.controller");
 const maintenance_service_1 = require("./maintenance.service");
+const prisma_service_1 = require("../../common/database/prisma.service");
 let MaintenanceModule = class MaintenanceModule {
 };
 exports.MaintenanceModule = MaintenanceModule;
 exports.MaintenanceModule = MaintenanceModule = __decorate([
     (0, common_1.Module)({
         controllers: [maintenance_controller_1.MaintenanceController],
-        providers: [maintenance_service_1.MaintenanceService],
+        providers: [maintenance_service_1.MaintenanceService, prisma_service_1.PrismaService],
         exports: [maintenance_service_1.MaintenanceService],
     })
 ], MaintenanceModule);

@@ -1,1 +1,1 @@
-export declare function seed(): void;
+export declare function seed(): Promise<void>;

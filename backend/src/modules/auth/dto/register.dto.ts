@@ -18,4 +18,8 @@ export class RegisterDto {
   @ApiProperty({ example: 'company-id' })
   @IsString()
   companyId: string;
+
+  @ApiProperty({ example: 'role-id' })
+  @IsString()
+  roleId: string;
 }

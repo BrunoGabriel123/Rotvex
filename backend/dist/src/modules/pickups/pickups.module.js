@@ -10,13 +10,14 @@ exports.PickupsModule = void 0;
 const common_1 = require("@nestjs/common");
 const pickups_controller_1 = require("./pickups.controller");
 const pickups_service_1 = require("./pickups.service");
+const prisma_service_1 = require("../../common/database/prisma.service");
 let PickupsModule = class PickupsModule {
 };
 exports.PickupsModule = PickupsModule;
 exports.PickupsModule = PickupsModule = __decorate([
     (0, common_1.Module)({
         controllers: [pickups_controller_1.PickupsController],
-        providers: [pickups_service_1.PickupsService],
+        providers: [pickups_service_1.PickupsService, prisma_service_1.PrismaService],
         exports: [pickups_service_1.PickupsService],
     })
 ], PickupsModule);

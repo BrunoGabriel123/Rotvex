@@ -10,13 +10,14 @@ exports.FuelModule = void 0;
 const common_1 = require("@nestjs/common");
 const fuel_controller_1 = require("./fuel.controller");
 const fuel_service_1 = require("./fuel.service");
+const prisma_service_1 = require("../../common/database/prisma.service");
 let FuelModule = class FuelModule {
 };
 exports.FuelModule = FuelModule;
 exports.FuelModule = FuelModule = __decorate([
     (0, common_1.Module)({
         controllers: [fuel_controller_1.FuelController],
-        providers: [fuel_service_1.FuelService],
+        providers: [fuel_service_1.FuelService, prisma_service_1.PrismaService],
         exports: [fuel_service_1.FuelService],
     })
 ], FuelModule);

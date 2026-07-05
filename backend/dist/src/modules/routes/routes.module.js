@@ -10,13 +10,14 @@ exports.RoutesModule = void 0;
 const common_1 = require("@nestjs/common");
 const routes_controller_1 = require("./routes.controller");
 const routes_service_1 = require("./routes.service");
+const prisma_service_1 = require("../../common/database/prisma.service");
 let RoutesModule = class RoutesModule {
 };
 exports.RoutesModule = RoutesModule;
 exports.RoutesModule = RoutesModule = __decorate([
     (0, common_1.Module)({
         controllers: [routes_controller_1.RoutesController],
-        providers: [routes_service_1.RoutesService],
+        providers: [routes_service_1.RoutesService, prisma_service_1.PrismaService],
         exports: [routes_service_1.RoutesService],
     })
 ], RoutesModule);
