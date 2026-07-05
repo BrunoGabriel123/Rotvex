@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
 
 export const metadata: Metadata = {
   title: "Rotvex - Gestão Logística",
@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <div className="flex h-screen bg-gray-50">
-          <Sidebar />
+          <AppSidebar />
           <div className="ml-64 flex flex-1 flex-col">
             {children}
           </div>

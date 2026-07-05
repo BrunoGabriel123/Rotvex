@@ -1,4 +1,4 @@
-import { Header } from "./Header";
+import { AppHeader } from "./AppHeader";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
+      <AppHeader />
       <main className="flex-1 overflow-y-auto p-6">{children}</main>
     </div>
   );

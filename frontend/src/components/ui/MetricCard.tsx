@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-interface DashboardCardProps {
+interface MetricCardProps {
   title: string;
   value: string | number;
   icon?: React.ReactNode;
@@ -11,13 +11,13 @@ interface DashboardCardProps {
   className?: string;
 }
 
-export function DashboardCard({
+export function MetricCard({
   title,
   value,
   icon,
   trend,
   className,
-}: DashboardCardProps) {
+}: MetricCardProps) {
   return (
     <div
       className={cn(

@@ -1,6 +1,6 @@
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { DashboardCard } from "@/components/ui/DashboardCard";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { Truck, Clock, Users, DollarSign, Target, TrendingUp } from "lucide-react";
 
 export default function Home() {
@@ -51,7 +51,7 @@ export default function Home() {
       />
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat) => (
-          <DashboardCard
+          <MetricCard
             key={stat.title}
             title={stat.title}
             value={stat.value}

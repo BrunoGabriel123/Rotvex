@@ -32,7 +32,7 @@ const navigation = [
   { name: "Configurações", href: "/configuracoes", icon: Settings },
 ];
 
-export function Sidebar() {
+export function AppSidebar() {
   const pathname = usePathname();
 
   return (
