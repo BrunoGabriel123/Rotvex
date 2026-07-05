@@ -1,20 +1,31 @@
+"use client";
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Users } from "lucide-react";
+import { SectionCard } from "@/components/ui/SectionCard";
+import { MotoristasTable } from "@/features/motoristas/components/MotoristasTable";
+import { DriverForm } from "@/features/motoristas/components/DriverForm";
+import { useState } from "react";
 
 export default function MotoristasPage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <MainLayout>
       <PageHeader
         title="Motoristas"
-        description="Gerenciamento de motoristas"
+        description="Gerencie os cadastros de motoristas"
+        actionLabel="Novo Motorista"
+        onAction={() => setIsFormOpen(true)}
       />
-      <EmptyState
-        title="Nenhum motorista encontrado"
-        description="Os motoristas aparecerão aqui quando cadastrados."
-        icon={<Users className="h-12 w-12" />}
-      />
+
+      <SectionCard title="Lista de Motoristas">
+        <MotoristasTable />
+      </SectionCard>
+
+      {isFormOpen && (
+        <DriverForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      )}
     </MainLayout>
   );
 }
