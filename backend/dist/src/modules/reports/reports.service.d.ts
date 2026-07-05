@@ -56,11 +56,11 @@ export declare class ReportsService {
         latitude: number | null;
         longitude: number | null;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         orderId: string;
         vehicleId: string | null;
         driverId: string | null;
         routeId: string | null;
+        completedAt: Date | null;
     })[]>;
     getFleetReport(companyId: string): Promise<({
         _count: {

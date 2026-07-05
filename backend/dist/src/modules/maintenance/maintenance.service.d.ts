@@ -13,8 +13,8 @@ export declare class MaintenanceService {
         updatedAt: Date;
         status: string;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         vehicleId: string;
+        completedAt: Date | null;
         cost: number | null;
     }>;
     findAll(params: {
@@ -45,8 +45,8 @@ export declare class MaintenanceService {
             updatedAt: Date;
             status: string;
             scheduledAt: Date | null;
-            completedAt: Date | null;
             vehicleId: string;
+            completedAt: Date | null;
             cost: number | null;
         })[];
         meta: {
@@ -78,8 +78,8 @@ export declare class MaintenanceService {
         updatedAt: Date;
         status: string;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         vehicleId: string;
+        completedAt: Date | null;
         cost: number | null;
     }>;
     update(id: string, updateMaintenanceDto: UpdateMaintenanceDto): Promise<{
@@ -91,8 +91,8 @@ export declare class MaintenanceService {
         updatedAt: Date;
         status: string;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         vehicleId: string;
+        completedAt: Date | null;
         cost: number | null;
     }>;
     remove(id: string): Promise<{
@@ -104,8 +104,8 @@ export declare class MaintenanceService {
         updatedAt: Date;
         status: string;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         vehicleId: string;
+        completedAt: Date | null;
         cost: number | null;
     }>;
 }

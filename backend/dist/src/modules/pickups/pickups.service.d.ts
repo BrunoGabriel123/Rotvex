@@ -17,8 +17,8 @@ export declare class PickupsService {
         latitude: number | null;
         longitude: number | null;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         orderId: string;
+        completedAt: Date | null;
     }>;
     findAll(params: {
         page?: number;
@@ -52,8 +52,8 @@ export declare class PickupsService {
             latitude: number | null;
             longitude: number | null;
             scheduledAt: Date | null;
-            completedAt: Date | null;
             orderId: string;
+            completedAt: Date | null;
         })[];
         meta: {
             total: number;
@@ -88,8 +88,8 @@ export declare class PickupsService {
         latitude: number | null;
         longitude: number | null;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         orderId: string;
+        completedAt: Date | null;
     }>;
     update(id: string, updatePickupDto: UpdatePickupDto): Promise<{
         id: string;
@@ -104,8 +104,8 @@ export declare class PickupsService {
         latitude: number | null;
         longitude: number | null;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         orderId: string;
+        completedAt: Date | null;
     }>;
     remove(id: string): Promise<{
         id: string;
@@ -120,7 +120,7 @@ export declare class PickupsService {
         latitude: number | null;
         longitude: number | null;
         scheduledAt: Date | null;
-        completedAt: Date | null;
         orderId: string;
+        completedAt: Date | null;
     }>;
 }

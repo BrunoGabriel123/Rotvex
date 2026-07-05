@@ -1,8 +1,15 @@
 "use client";
 
 import { Bell, Search, User } from "lucide-react";
+import { authService } from "@/lib/auth";
 
 export function AppHeader() {
+  const user = authService.getUser();
+
+  const handleLogout = async () => {
+    await authService.logout();
+  };
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6">
       <div className="flex items-center gap-4">
@@ -24,10 +31,16 @@ export function AppHeader() {
             <User className="h-5 w-5 text-gray-600" />
           </div>
           <div className="text-sm">
-            <p className="font-medium text-gray-900">Admin</p>
-            <p className="text-xs text-gray-500">Administrador</p>
+            <p className="font-medium text-gray-900">{user?.name || 'Admin'}</p>
+            <p className="text-xs text-gray-500">{user?.email || 'Administrador'}</p>
           </div>
         </div>
+        <button
+          onClick={handleLogout}
+          className="text-sm text-red-600 hover:text-red-700"
+        >
+          Sair
+        </button>
       </div>
     </header>
   );

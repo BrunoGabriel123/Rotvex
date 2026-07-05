@@ -90,11 +90,11 @@ export declare class OrdersService {
             latitude: number | null;
             longitude: number | null;
             scheduledAt: Date | null;
-            completedAt: Date | null;
             orderId: string;
             vehicleId: string | null;
             driverId: string | null;
             routeId: string | null;
+            completedAt: Date | null;
         }[];
         pickups: {
             id: string;
@@ -109,8 +109,8 @@ export declare class OrdersService {
             latitude: number | null;
             longitude: number | null;
             scheduledAt: Date | null;
-            completedAt: Date | null;
             orderId: string;
+            completedAt: Date | null;
         }[];
     } & {
         description: string | null;
