@@ -1,20 +1,31 @@
+"use client";
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Package } from "lucide-react";
+import { SectionCard } from "@/components/ui/SectionCard";
+import { PedidosTable } from "@/features/pedidos/components/PedidosTable";
+import { OrderForm } from "@/features/pedidos/components/OrderForm";
+import { useState } from "react";
 
 export default function PedidosPage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <MainLayout>
       <PageHeader
         title="Pedidos"
-        description="Gerenciamento de pedidos"
+        description="Gerencie os pedidos"
+        actionLabel="Novo Pedido"
+        onAction={() => setIsFormOpen(true)}
       />
-      <EmptyState
-        title="Nenhum pedido encontrado"
-        description="Os pedidos aparecerão aqui quando criados."
-        icon={<Package className="h-12 w-12" />}
-      />
+
+      <SectionCard title="Lista de Pedidos">
+        <PedidosTable />
+      </SectionCard>
+
+      {isFormOpen && (
+        <OrderForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      )}
     </MainLayout>
   );
 }
