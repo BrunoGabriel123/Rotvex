@@ -19,10 +19,13 @@ export default function LoginPage() {
 
     try {
       const response = await api.auth.login(email, password);
+      console.log('Login response:', response);
       authService.setToken(response.access_token);
       authService.setUser(response.user);
+      console.log('Token set, redirecting...');
       router.push('/');
     } catch (err: any) {
+      console.error('Login error:', err);
       setError(err.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
