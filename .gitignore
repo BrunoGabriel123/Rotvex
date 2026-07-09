@@ -15,6 +15,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -54,3 +55,20 @@ docker volumes
 
 # OS
 Thumbs.db
+
+# Backend specific
+backend/node_modules
+backend/dist
+backend/.env
+backend/.env.local
+backend/prisma/migrations
+
+# Frontend specific  
+frontend/node_modules
+frontend/.next
+frontend/.env.local
+frontend/out
+
+# Prisma
+node_modules/.prisma
+prisma/migrations
