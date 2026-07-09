@@ -25,7 +25,8 @@ export async function fetchAPI<T>(
     throw new Error(error.message || 'Erro na requisição');
   }
 
-  return response.json();
+  const json = await response.json();
+  return json.data || json;
 }
 
 export const api = {
