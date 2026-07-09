@@ -299,6 +299,35 @@ export async function seed() {
   console.log(
     `Created ${4} roles and ${createdPermissions.length} permissions`,
   );
+
+  // Create admin user
+  const adminCompany = await prisma.company.upsert({
+    where: { id: 'default-company' },
+    update: {},
+    create: {
+      id: 'default-company',
+      name: 'Rotvex',
+      active: true,
+    },
+  });
+
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@rotvex.com' },
+    update: {},
+    create: {
+      email: 'admin@rotvex.com',
+      password: hashedPassword,
+      name: 'Admin',
+      companyId: adminCompany.id,
+      roleId: adminRole.id,
+      active: true,
+    },
+  });
+
+  console.log('Admin user created:');
+  console.log('Email: admin@rotvex.com');
+  console.log('Password: admin123');
 }
 
 seed()
