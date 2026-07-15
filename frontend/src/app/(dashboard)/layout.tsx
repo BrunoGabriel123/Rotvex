@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppSidebar } from "@/components/layout/AppSidebar";
 
@@ -10,17 +10,17 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/login');
     }
   }, [router]);
 
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  
-  if (!token) {
+  if (!isMounted) {
     return null;
   }
 

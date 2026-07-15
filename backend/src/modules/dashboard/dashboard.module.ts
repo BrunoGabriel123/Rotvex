@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { DashboardController } from './dashboard.controller';
 import { DashboardService } from './dashboard.service';
 import { PrismaService } from '../../common/database/prisma.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [DashboardController],
   providers: [DashboardService, PrismaService],
   exports: [DashboardService],
