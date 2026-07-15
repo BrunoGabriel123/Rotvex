@@ -33,7 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'placeholder:text-gray-400',
               error
                 ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500',
+                : 'border-gray-300 focus:border-slate-500 focus:ring-slate-500',
               'hover:border-gray-400',
               icon && 'pl-11',
               className

@@ -21,7 +21,7 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        "rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-primary-300 animate-fade-in",
+        "rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-slate-300 animate-fade-in",
         className
       )}
     >
@@ -42,7 +42,7 @@ export function MetricCard({
           )}
         </div>
         {icon && (
-          <div className="rounded-md bg-primary-50 p-3 text-primary-600 transition-all duration-300 hover:bg-primary-100">
+          <div className="rounded-md bg-slate-50 p-3 text-slate-600 transition-all duration-300 hover:bg-slate-100">
             {icon}
           </div>
         )}

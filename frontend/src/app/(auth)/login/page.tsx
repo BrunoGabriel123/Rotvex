@@ -35,26 +35,26 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 items-center justify-center p-12 relative overflow-hidden animate-slide-in-left">
+      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 items-center justify-center p-12 relative overflow-hidden animate-slide-in-left">
         {/* Abstract patterns */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-5">
           <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         </div>
         
         <div className="relative z-10 text-center max-w-lg">
           <div className="flex justify-center mb-8 animate-fade-in">
-            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl">
+            <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700">
               <Truck className="w-16 h-16 text-white" />
             </div>
           </div>
           <h1 className="text-5xl font-bold text-white mb-6 tracking-tight animate-fade-in">
             Rotvex
           </h1>
-          <p className="text-xl text-primary-200 leading-relaxed animate-fade-in">
+          <p className="text-xl text-slate-400 leading-relaxed animate-fade-in">
             Gestão logística inteligente para transformar sua operação
           </p>
-          <div className="mt-12 flex justify-center gap-8 text-primary-300 animate-fade-in">
+          <div className="mt-12 flex justify-center gap-8 text-slate-500 animate-fade-in">
             <div className="text-center">
               <div className="text-3xl font-bold text-white">+500</div>
               <div className="text-sm mt-1">Empresas</div>
@@ -72,16 +72,16 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gradient-to-br from-gray-50 to-primary-50/30">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex justify-center mb-8">
-            <div className="bg-primary-800 p-3 rounded-xl">
+            <div className="bg-slate-900 p-3 rounded-xl">
               <Truck className="w-8 h-8 text-white" />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-8 md:p-10 border border-gray-100 animate-slide-up">
+          <div className="bg-white rounded-xl shadow-sm p-8 md:p-10 border border-gray-200 animate-slide-up">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Bem-vindo de volta
@@ -127,11 +127,11 @@ export default function LoginPage() {
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                    className="w-4 h-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500"
                   />
                   <span className="text-sm text-gray-600">Lembrar-me</span>
                 </label>
-                <a href="#" className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors">
+                <a href="#" className="text-sm text-slate-600 hover:text-slate-900 font-medium transition-colors">
                   Esqueceu a senha?
                 </a>
               </div>
@@ -153,7 +153,7 @@ export default function LoginPage() {
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-600">
                 Não tem uma conta?{' '}
-                <a href="/register" className="text-primary-600 hover:text-primary-700 font-medium transition-colors">
+                <a href="/register" className="text-slate-600 hover:text-slate-900 font-medium transition-colors">
                   Criar conta
                 </a>
               </p>

@@ -35,7 +35,7 @@ export function DataTable<T extends Record<string, any>>({
             {columns.map((column) => (
               <th
                 key={column.key}
-                className="bg-primary-50 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-primary-700 transition-all duration-300"
+                className="bg-slate-50 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-700 transition-all duration-300"
               >
                 {column.header}
               </th>
@@ -46,7 +46,7 @@ export function DataTable<T extends Record<string, any>>({
           {data.map((row, rowIndex) => (
             <tr 
               key={rowIndex} 
-              className="hover:bg-primary-50 transition-all duration-200 cursor-pointer"
+              className="hover:bg-slate-50 transition-all duration-200 cursor-pointer"
               style={{ animationDelay: `${rowIndex * 50}ms` }}
             >
               {columns.map((column) => (

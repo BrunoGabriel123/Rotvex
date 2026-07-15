@@ -18,17 +18,17 @@ export function AppHeader() {
           <input
             type="text"
             placeholder="Buscar..."
-            className="w-64 rounded-md border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all duration-200"
+            className="w-64 rounded-md border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 transition-all duration-200"
           />
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <button className="rounded-md p-2 text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-all duration-200">
+        <button className="rounded-md p-2 text-gray-600 hover:bg-slate-50 hover:text-slate-600 transition-all duration-200">
           <Bell className="h-5 w-5" />
         </button>
-        <div className="flex items-center gap-3 rounded-md border border-gray-200 px-3 py-2 hover:border-primary-300 transition-all duration-200">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100">
-            <User className="h-5 w-5 text-primary-600" />
+        <div className="flex items-center gap-3 rounded-md border border-gray-200 px-3 py-2 hover:border-slate-300 transition-all duration-200">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100">
+            <User className="h-5 w-5 text-slate-600" />
           </div>
           <div className="text-sm">
             <p className="font-medium text-gray-900">{user?.name || 'Admin'}</p>
