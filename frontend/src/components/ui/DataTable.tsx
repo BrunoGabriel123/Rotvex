@@ -21,21 +21,21 @@ export function DataTable<T extends Record<string, any>>({
 }: DataTableProps<T>) {
   if (data.length === 0) {
     return (
-      <div className={cn("flex flex-col items-center justify-center py-12", className)}>
+      <div className={cn("flex flex-col items-center justify-center py-12 animate-fade-in", className)}>
         <p className="text-sm text-gray-500">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className={cn("overflow-x-auto", className)}>
+    <div className={cn("overflow-x-auto animate-fade-in", className)}>
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
-                className="bg-gray-50 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                className="bg-primary-50 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-primary-700 transition-all duration-300"
               >
                 {column.header}
               </th>
@@ -44,11 +44,15 @@ export function DataTable<T extends Record<string, any>>({
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="hover:bg-gray-50">
+            <tr 
+              key={rowIndex} 
+              className="hover:bg-primary-50 transition-all duration-200 cursor-pointer"
+              style={{ animationDelay: `${rowIndex * 50}ms` }}
+            >
               {columns.map((column) => (
                 <td
                   key={column.key}
-                  className="whitespace-nowrap px-6 py-4 text-sm text-gray-900"
+                  className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 transition-all duration-200"
                 >
                   {column.render
                     ? column.render(row[column.key], row)

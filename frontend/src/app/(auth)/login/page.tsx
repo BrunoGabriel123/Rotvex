@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { authService } from '@/lib/auth';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Truck, Lock, Mail } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,13 +22,10 @@ export default function LoginPage() {
 
     try {
       const response = await api.auth.login(email, password);
-      console.log('Login response:', response);
       authService.setToken(response.access_token);
       authService.setUser(response.user);
-      console.log('Token set, redirecting...');
       router.push('/');
     } catch (err: any) {
-      console.error('Login error:', err);
       setError(err.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
@@ -33,56 +33,87 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Rotvex - Login</h1>
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+    <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-950 flex items-center justify-center p-4">
+      <div className="w-full max-w-md animate-slide-up">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-800 rounded-2xl mb-4 animate-fade-in">
+            <Truck className="w-8 h-8 text-white" />
           </div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              id="email"
+          <h1 className="text-3xl font-bold text-white mb-2 animate-fade-in">Rotvex</h1>
+          <p className="text-primary-300 animate-fade-in">Gestão logística inteligente</p>
+        </div>
+
+        {/* Login Card */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-semibold text-white mb-2">Acessar sistema</h2>
+            <p className="text-primary-300 text-sm">Entre suas credenciais para continuar</p>
+          </div>
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg animate-fade-in">
+              <p className="text-sm text-red-200">{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
               type="email"
+              label="Email"
+              placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="seu@email.com"
+              icon={<Mail className="w-5 h-5 text-gray-400" />}
+              className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:bg-white/10"
             />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Senha
-            </label>
-            <input
-              id="password"
+            
+            <Input
               type="password"
+              label="Senha"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="••••••••"
+              icon={<Lock className="w-5 h-5 text-gray-400" />}
+              className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:bg-white/10"
             />
+
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 cursor-pointer text-primary-300">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-white/20 bg-white/5 text-primary-600 focus:ring-primary-500"
+                />
+                Lembrar-me
+              </label>
+              <a href="#" className="text-primary-400 hover:text-primary-300 transition-colors">
+                Esqueceu a senha?
+              </a>
+            </div>
+
+            <Button
+              type="submit"
+              loading={loading}
+              className="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium"
+            >
+              {loading ? 'Entrando...' : 'Entrar'}
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-primary-300">
+              Não tem uma conta?{' '}
+              <a href="/register" className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
+                Criar conta
+              </a>
+            </p>
           </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          >
-            {loading ? 'Entrando...' : 'Entrar'}
-          </button>
-        </form>
-        <p className="text-center mt-4 text-sm text-gray-600">
-          Não tem uma conta?{' '}
-          <a href="/register" className="text-blue-600 hover:underline">
-            Registre-se
-          </a>
+        </div>
+
+        <p className="text-center mt-6 text-xs text-primary-400">
+          © 2026 Rotvex. Todos os direitos reservados.
         </p>
       </div>
     </div>
