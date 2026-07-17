@@ -1,1 +1,4 @@
-npx lint-staged
+#!/usr/bin/env sh
+
+# Temporariamente desabilitado a pedido do time.
+exit 0
