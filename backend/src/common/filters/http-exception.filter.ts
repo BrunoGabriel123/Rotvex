@@ -15,7 +15,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
+    const request = ctx.getRequest<Request & { correlationId?: string; user?: { id?: string; companyId?: string } }>();
 
     const status =
       exception instanceof HttpException
@@ -27,15 +27,24 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exception.getResponse()
         : 'Internal server error';
 
+    const logPayload = {
+      method: request.method,
+      url: request.url,
+      status,
+      correlationId: request.correlationId,
+      companyId: request.user?.companyId,
+      userId: request.user?.id,
+    };
     this.logger.error(
-      `${request.method} ${request.url}`,
-      exception instanceof Error ? exception.stack : exception,
+      JSON.stringify(logPayload),
+      exception instanceof Error ? exception.stack : undefined,
     );
 
     response.status(status).json({
       success: false,
       timestamp: new Date().toISOString(),
       path: request.url,
+      correlationId: request.correlationId,
       error: message,
     });
   }

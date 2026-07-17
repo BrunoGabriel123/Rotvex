@@ -15,8 +15,12 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const request = context.switchToHttp().getRequest();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { method, url } = request;
+    const { method, url } = request as {
+      method: string;
+      url: string;
+      correlationId?: string;
+      user?: { id?: string; companyId?: string };
+    };
     const now = Date.now();
 
     return next.handle().pipe(
@@ -25,7 +29,17 @@ export class LoggingInterceptor implements NestInterceptor {
         const response = context.switchToHttp().getResponse();
         const delay = Date.now() - now;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        this.logger.log(`${method} ${url} ${response.statusCode} - ${delay}ms`);
+        const logPayload = {
+          method,
+          url,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          statusCode: response.statusCode,
+          durationMs: delay,
+          correlationId: request?.correlationId,
+          companyId: request?.user?.companyId,
+          userId: request?.user?.id,
+        };
+        this.logger.log(JSON.stringify(logPayload));
       }),
     );
   }

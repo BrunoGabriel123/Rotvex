@@ -10,6 +10,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum OperationStatus {
+  DRAFT
+  AWAITING_PLANNING
+  PLANNED
+  READY_TO_START
+  IN_PICKUP
+  IN_TRANSIT
+  IN_DELIVERY
+  DELIVERED
+  COMPLETED
+  CANCELLED
+}
+
+enum OperationPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
+enum OperationStopType {
+  PICKUP
+  DELIVERY
+  SUPPORT
+  RETURN
+}
+
+enum OperationStopStatus {
+  PENDING
+  ARRIVED
+  IN_SERVICE
+  COMPLETED
+  FAILED
+  SKIPPED
+}
+
 model Company {
   id          String    @id @default(cuid())
   name        String
@@ -24,6 +60,11 @@ model Company {
   drivers     Driver[]
   orders      Order[]
   routes      Route[]
+  operations  Operation[]
+  operationStops OperationStop[]
+  operationStatusHistory OperationStatusHistory[]
+  operationOccurrences OperationOccurrence[]
+  deliveryProofs DeliveryProof[]
   auditLogs   AuditLog[]
   expenses    Expense[]
   notifications Notification[]
@@ -44,6 +85,11 @@ model User {
   updatedAt    DateTime     @updatedAt
   refreshTokens RefreshToken[]
   auditLogs    AuditLog[]
+  createdOperations Operation[] @relation("OperationCreatedBy")
+  updatedOperations Operation[] @relation("OperationUpdatedBy")
+  statusChanges OperationStatusHistory[] @relation("OperationStatusChangedBy")
+  reportedOccurrences OperationOccurrence[] @relation("OperationOccurrenceReportedBy")
+  uploadedProofs DeliveryProof[] @relation("DeliveryProofUploadedBy")
 }
 
 model Role {
@@ -102,6 +148,7 @@ model Vehicle {
   maintenances Maintenance[]
   fuels       Fuel[]
   deliveries  Delivery[]
+  operations  Operation[]
 }
 
 model Driver {
@@ -118,6 +165,7 @@ model Driver {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deliveries  Delivery[]
+  operations  Operation[]
 }
 
 model Client {
@@ -138,6 +186,8 @@ model Client {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   orders      Order[]
+  operations  Operation[]
+  operationStops OperationStop[]
 }
 
 model Order {
@@ -155,6 +205,7 @@ model Order {
   updatedAt   DateTime  @updatedAt
   deliveries  Delivery[]
   pickups     Pickup[]
+  operations  Operation[]
 }
 
 model Delivery {
@@ -171,6 +222,8 @@ model Delivery {
   deletedAt   DateTime?
   orderId     String
   order       Order    @relation(fields: [orderId], references: [id])
+  operationId String?
+  operation   Operation? @relation(fields: [operationId], references: [id])
   vehicleId   String?
   vehicle     Vehicle? @relation(fields: [vehicleId], references: [id])
   driverId    String?
@@ -195,6 +248,8 @@ model Pickup {
   deletedAt   DateTime?
   orderId     String
   order       Order    @relation(fields: [orderId], references: [id])
+  operationId String?
+  operation   Operation? @relation(fields: [operationId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -210,6 +265,166 @@ model Route {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   deliveries  Delivery[]
+  operations  Operation[]
+}
+
+model Operation {
+  id                   String            @id @default(cuid())
+  companyId            String
+  company              Company           @relation(fields: [companyId], references: [id])
+  clientId             String
+  client               Client            @relation(fields: [clientId], references: [id])
+  orderId              String?
+  order                Order?            @relation(fields: [orderId], references: [id])
+  routeId              String?
+  route                Route?            @relation(fields: [routeId], references: [id])
+  driverId             String?
+  driver               Driver?           @relation(fields: [driverId], references: [id])
+  vehicleId            String?
+  vehicle              Vehicle?          @relation(fields: [vehicleId], references: [id])
+  code                 String
+  title                String?
+  status               OperationStatus
+  priority             OperationPriority @default(NORMAL)
+  originName           String
+  originAddress        String
+  originLatitude       Float?
+  originLongitude      Float?
+  destinationName      String?
+  destinationAddress   String?
+  destinationLatitude  Float?
+  destinationLongitude Float?
+  plannedStartAt       DateTime?
+  plannedEndAt         DateTime?
+  actualStartAt        DateTime?
+  actualEndAt          DateTime?
+  estimatedDistanceKm  Decimal?          @db.Decimal(10, 2)
+  actualDistanceKm     Decimal?          @db.Decimal(10, 2)
+  estimatedDurationMin Int?
+  actualDurationMin    Int?
+  estimatedCost        Decimal?          @db.Decimal(12, 2)
+  actualCost           Decimal?          @db.Decimal(12, 2)
+  freightValue         Decimal?          @db.Decimal(12, 2)
+  quantityTotal        Float?
+  volumeTotal          Float?
+  weightTotal          Float?
+  notes                String?
+  cancellationReason   String?
+  createdById          String
+  createdBy            User              @relation("OperationCreatedBy", fields: [createdById], references: [id])
+  updatedById          String?
+  updatedBy            User?             @relation("OperationUpdatedBy", fields: [updatedById], references: [id])
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  deletedAt            DateTime?
+  deliveries           Delivery[]
+  pickups              Pickup[]
+  stops                OperationStop[]
+  statusHistory        OperationStatusHistory[]
+  occurrences          OperationOccurrence[]
+  proofs               DeliveryProof[]
+
+  @@unique([companyId, code])
+  @@index([companyId, status])
+  @@index([companyId, plannedStartAt])
+  @@index([companyId, driverId])
+  @@index([companyId, vehicleId])
+}
+
+model OperationStop {
+  id                 String               @id @default(cuid())
+  companyId          String
+  company            Company              @relation(fields: [companyId], references: [id])
+  operationId        String
+  operation          Operation            @relation(fields: [operationId], references: [id])
+  clientId           String?
+  client             Client?              @relation(fields: [clientId], references: [id])
+  sequence           Int
+  type               OperationStopType
+  status             OperationStopStatus  @default(PENDING)
+  locationName       String
+  address            String
+  latitude           Float?
+  longitude          Float?
+  windowStartAt      DateTime?
+  windowEndAt        DateTime?
+  plannedArrivalAt   DateTime?
+  actualArrivalAt    DateTime?
+  actualDepartureAt  DateTime?
+  serviceTimeMinutes Int?
+  quantity           Float?
+  volume             Float?
+  weight             Float?
+  notes              String?
+  instructions       String?
+  contactName        String?
+  contactPhone       String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  proofs             DeliveryProof[]
+  occurrences        OperationOccurrence[]
+
+  @@index([companyId, operationId])
+  @@unique([operationId, sequence])
+}
+
+model OperationStatusHistory {
+  id           String           @id @default(cuid())
+  companyId    String
+  company      Company          @relation(fields: [companyId], references: [id])
+  operationId  String
+  operation    Operation        @relation(fields: [operationId], references: [id])
+  fromStatus   OperationStatus?
+  toStatus     OperationStatus
+  changedById  String?
+  changedBy    User?            @relation("OperationStatusChangedBy", fields: [changedById], references: [id])
+  reason       String?
+  metadata     Json?
+  createdAt    DateTime         @default(now())
+
+  @@index([companyId, operationId])
+  @@index([companyId, toStatus])
+}
+
+model OperationOccurrence {
+  id             String        @id @default(cuid())
+  companyId      String
+  company        Company       @relation(fields: [companyId], references: [id])
+  operationId    String
+  operation      Operation     @relation(fields: [operationId], references: [id])
+  stopId         String?
+  stop           OperationStop? @relation(fields: [stopId], references: [id])
+  reportedById   String?
+  reportedBy     User?         @relation("OperationOccurrenceReportedBy", fields: [reportedById], references: [id])
+  title          String
+  description    String?
+  severity       String?
+  status         String?       @default("open")
+  metadata       Json?
+  resolvedAt     DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([companyId, operationId])
+  @@index([companyId, status])
+}
+
+model DeliveryProof {
+  id             String        @id @default(cuid())
+  companyId      String
+  company        Company       @relation(fields: [companyId], references: [id])
+  operationId    String?
+  operation      Operation?    @relation(fields: [operationId], references: [id])
+  operationStopId String?
+  operationStop  OperationStop? @relation(fields: [operationStopId], references: [id])
+  uploadedById   String?
+  uploadedBy     User?         @relation("DeliveryProofUploadedBy", fields: [uploadedById], references: [id])
+  type           String
+  url            String?
+  metadata       Json?
+  createdAt      DateTime      @default(now())
+
+  @@index([companyId, operationId])
 }
 
 model Maintenance {
